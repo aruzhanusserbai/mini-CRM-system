@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<div layout:fragment="mainFragment">
+    <div style="width: 100%; align-content: center;">
+        <form th:action="@{/addRequest}" th:method="post" th:object="${request}">
+            <div class="form-group mx-auto" style="width: 50%;">
+                Full Name:
+                <p><input th:field="*{userName}" class="form-control"></p>
+                Course:
+                <p><select th:name="courseId" class="form-control" id="exampleFormControlSelect1">
+                    <option th:each="course: ${courses}"
+                            th:value="${course.id}"
+                            th:text="${course.name}"
+                    ></option>
+                </select></p>
+                Phone Number:
+                <p><input th:field="*{phone}" class="form-control"></p>
+                Commentary:
+                <p><textarea th:field="*{commentary}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea></p>
+                <p><button type="submit" class="btn btn-primary">Send</button></p>
+            </div>
+        </form>
+    </div>
+</div>
+</html>

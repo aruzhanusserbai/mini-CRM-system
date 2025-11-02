@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/main}">
+<div layout:fragment="mainFragment">
+  <form>
+    <div class="form-group mx-auto" style="width: 50%;">
+      <h4 style="text-align: center" th:text="*{request.handled} ?'Handled request':'**New not handled request**' "
+          th:style="${request.handled} ? 'color:green' : 'color:red' ">
+      </h4>
+      <p><input th:field="*{request.userName}" class="form-control" readonly></p>
+      <p><input th:field="*{request.course.name}" class="form-control" readonly></p>
+      <p><input th:field="*{request.commentary}" class="form-control" readonly></p>
+      <p><input th:field="*{request.phone}" class="form-control" readonly></p>
+    </div>
+  </form>
+
+  <form th:if="${!request.handled}">
+    <button type="button"  data-bs-toggle="modal" data-bs-target="#myModal">handle</button>
+  </form>
+  <div th:if="${request.operators.size()>0}">
+    <table>
+      <thead>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Department</th>
+        <th>Delete</th>
+      </thead>
+      <tbody>
+        <tr th:each="operator: ${requestOperators}">
+          <td th:text="${operator.id}"></td>
+          <td th:text="${operator.name}"></td>
+          <td th:text="${operator.surname}"></td>
+          <td th:text="${operator.department}"></td>
+          <td>
+            <form th:action="@{'/delete/operator/' + ${operator.id}}" th:method="delete">
+              <input type="hidden" th:value="${request.id}" th:name="requestId">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel">New Task</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form th:action="@{'/request/operators/add/' + ${request.id}}" method="post">
+            <div class="form-group" th:each="operator: ${operators}">
+              <input type="checkbox"
+                     th:name="operatorIds"
+                     th:value="${operator.id}">
+              <span th:text="${operator.name}"></span>
+            </div>
+            <button type="submit">save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</html>
